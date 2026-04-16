@@ -1331,7 +1331,7 @@ RESPONDE ÚNICAMENTE con este JSON exacto, sin texto adicional, sin markdown:
       body: JSON.stringify({
         apiKey: state.apiKey,
         model: "claude-haiku-4-5-20251001",
-        max_tokens: 4000,
+        max_tokens: 8000,
         system: SYSTEM_PROMPT,
         messages
       })
@@ -1351,9 +1351,25 @@ RESPONDE ÚNICAMENTE con este JSON exacto, sin texto adicional, sin markdown:
     try {
       parsed = JSON.parse(raw);
     } catch(e) {
-      const match = raw.match(/\{[\s\S]*\}/);
-      if (match) parsed = JSON.parse(match[0]);
-      else throw new Error('La respuesta no contiene JSON válido');
+      // Try to extract JSON even if truncated
+      const match = raw.match(/\{[\s\S]*/);
+      if (!match) throw new Error('La respuesta no contiene JSON válido');
+      let attempt = match[0];
+      // Close any open arrays/objects by counting brackets
+      let opens = 0, openArr = 0;
+      for (const ch of attempt) {
+        if (ch === '{') opens++;
+        if (ch === '}') opens--;
+        if (ch === '[') openArr++;
+        if (ch === ']') openArr--;
+      }
+      while (openArr > 0) { attempt += ']'; openArr--; }
+      while (opens > 0) { attempt += '}'; opens--; }
+      try {
+        parsed = JSON.parse(attempt);
+      } catch(e2) {
+        throw new Error('JSON inválido: el modelo superó el límite de tokens. Reduce el número de ofertas o intenta de nuevo.');
+      }
     }
 
     state.results = parsed;
