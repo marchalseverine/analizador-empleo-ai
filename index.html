@@ -1118,14 +1118,14 @@ RESPONDE ÚNICAMENTE con este JSON exacto, sin texto adicional, sin markdown:
       "aplicar": true,
       "skills_match": [""],
       "skills_gap": [""],
-      "recomendacion": "Una frase corta y directa"
+      "recomendacion": "max 10 palabras"
     }
   ],
   "insights": {
     "ciudades": [{"nombre":"","ofertas":0,"score_medio":0}],
     "skills_demandadas": [{"skill":"","frecuencia":0}],
     "distribucion_scores": {"alto":0,"medio":0,"bajo":0},
-    "analisis_narrativo": "3-4 frases de análisis estratégico personalizado para el candidato sobre su posición en el mercado, qué le diferencia, y qué debería priorizar en su búsqueda."
+    "analisis_narrativo": "2 frases máximo, directo al punto."
   }
 }`;
 
@@ -1293,19 +1293,26 @@ RESPONDE ÚNICAMENTE con este JSON exacto, sin texto adicional, sin markdown:
       "aplicar": true,
       "skills_match": [""],
       "skills_gap": [""],
-      "recomendacion": "Una frase corta y directa"
+      "recomendacion": "max 10 palabras"
     }
   ],
   "insights": {
     "ciudades": [{"nombre":"","ofertas":0,"score_medio":0}],
     "skills_demandadas": [{"skill":"","frecuencia":0}],
     "distribucion_scores": {"alto":0,"medio":0,"bajo":0},
-    "analisis_narrativo": "3-4 frases de análisis estratégico personalizado para el candidato sobre su posición en el mercado, qué le diferencia, y qué debería priorizar en su búsqueda."
+    "analisis_narrativo": "2 frases máximo, directo al punto."
   }
 }`;
 
   try {
     updateLoadingStep('Claude leyendo tu CV...');
+
+    // Limit to 15 offers to stay within Netlify 10s timeout
+    const offerLines = offers.split('\n').filter(l => l.trim());
+    const header = offerLines[0];
+    const dataLines = offerLines.slice(1, 16); // max 15 offers
+    const truncatedOffers = [header, ...dataLines].join('\n');
+    const truncated = offerLines.length > 16;
 
     const messages = [
       {
@@ -1317,11 +1324,13 @@ RESPONDE ÚNICAMENTE con este JSON exacto, sin texto adicional, sin markdown:
           },
           {
             type: "text",
-            text: `Aquí están las ofertas de empleo del mercado:\n\n${offers}\n\nAnaliza mi CV y todas las ofertas. Devuelve el JSON completo.`
+            text: `Aquí están las ofertas de empleo (${dataLines.length} ofertas):\n\n${truncatedOffers}\n\nAnaliza mi CV y todas las ofertas. Devuelve el JSON completo.${truncated ? ' NOTA: Se han limitado a 15 ofertas para optimizar el análisis.' : ''}`
           }
         ]
       }
     ];
+
+    if (truncated) showToast('ℹ️ Analizando las primeras 15 ofertas para mayor velocidad', 'success');
 
     updateLoadingStep('Calculando scores de matching...');
 
