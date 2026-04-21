@@ -1,0 +1,1532 @@
+<!DOCTYPE html><html lang="es"><plasmo-csui id="jobright-helper-plugin"></plasmo-csui><head></head><body data-cc-id="cc-1" style="cursor: crosshair;"><plasmo-csui id="jobright-helper-plugin"></plasmo-csui>
+
+
+
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visualizaci&#xF3;n de Datos con IA &#x2014; root_</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&amp;family=DM+Sans:wght@300;400;500&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #1A1A1A;
+    --surface: #2E2E2E;
+    --coral: #FF6B6B;
+    --text: #F5F5F0;
+    --text-muted: #999990;
+    --border: #3A3A3A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #111;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 32px 16px;
+    overflow-x: hidden;
+  }
+
+  /* &#x2500;&#x2500; Page shell &#x2500;&#x2500; */
+  .page {
+    width: 794px; /* A4 at 96dpi */
+    min-height: 1123px;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    page-break-after: always;
+  }
+
+  /* &#x2500;&#x2500; Logo footer (every page) &#x2500;&#x2500; */
+  .page-footer {
+    position: absolute;
+    bottom: 28px;
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 44px;
+  }
+  .logo {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    color: var(--coral);
+    letter-spacing: -0.5px;
+  }
+  .page-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* &#x2500;&#x2500; Typography &#x2500;&#x2500; */
+  .t-display {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+  }
+  .t-h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+  }
+  .t-h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+  }
+  .t-body { font-size: 13.5px; line-height: 1.65; font-weight: 300; }
+  .t-small { font-size: 11.5px; line-height: 1.5; }
+  .t-mono { font-family: 'DM Mono', monospace; font-size: 12px; color: #aaaaaa; }
+
+  .coral { color: var(--coral); }
+  .muted { color: var(--text-muted); }
+
+  /* &#x2500;&#x2500; Paso badge &#x2500;&#x2500; */
+  .paso-badge {
+    width: 34px; height: 34px;
+    background: var(--coral);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 15px;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* &#x2500;&#x2500; Code block &#x2500;&#x2500; */
+  .code-block {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 16px 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    color: #aaaaaa;
+    line-height: 1.7;
+    border-left: 3px solid var(--coral);
+  }
+
+  /* &#x2500;&#x2500; Table &#x2500;&#x2500; */
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr:nth-child(odd) td { background: var(--surface); }
+  tbody tr:nth-child(even) td { background: transparent; }
+  tbody td {
+    padding: 9px 14px;
+    font-size: 12.5px;
+    font-weight: 300;
+    color: var(--text);
+    vertical-align: top;
+  }
+
+  /* &#x2500;&#x2500; Tip box &#x2500;&#x2500; */
+  .tip-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--coral);
+    border-radius: 6px;
+    padding: 13px 16px;
+    font-size: 12.5px;
+    line-height: 1.6;
+  }
+  .tip-label {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 5px;
+  }
+
+  /* &#x2500;&#x2500; Divider &#x2500;&#x2500; */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+  }
+
+  /* &#x2500;&#x2500; Score badge example &#x2500;&#x2500; */
+  .score-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(72, 199, 142, 0.15);
+    border: 1px solid rgba(72, 199, 142, 0.4);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: #48C78E;
+    font-weight: 500;
+  }
+  .score-no {
+    background: rgba(255, 107, 107, 0.12);
+    border-color: rgba(255, 107, 107, 0.35);
+    color: var(--coral);
+  }
+
+  /* &#x2500;&#x2500; Pipeline viz &#x2500;&#x2500; */
+  .pipeline-block {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+  }
+  .pipeline-block.accent {
+    border: 1.5px solid var(--coral);
+    background: rgba(255,107,107,0.07);
+  }
+  .pipe-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 22px;
+    padding: 0 4px;
+    flex-shrink: 0;
+  }
+
+  /* &#x2500;&#x2500; Step list &#x2500;&#x2500; */
+  .step-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .step-row:last-child { border-bottom: none; }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--coral);
+    font-weight: 500;
+    width: 24px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* &#x2500;&#x2500; Timeline (page 7) &#x2500;&#x2500; */
+  .timeline-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 0 0 28px 0;
+    position: relative;
+  }
+  .timeline-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 38px;
+    bottom: 0;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--coral);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 900;
+    font-size: 16px;
+    color: #fff;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* &#x2500;&#x2500; Geometric decoration &#x2500;&#x2500; */
+  .geo-circle {
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0.05;
+    background: var(--coral);
+  }
+
+  /* Floating controls (screen only) */
+  .app-header {
+    position: fixed;
+    top: max(10px, env(safe-area-inset-top));
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(794px, calc(100vw - 16px));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start;
+    z-index: 2147483647;
+    pointer-events: none;
+  }
+
+  .header-title {
+    pointer-events: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: rgba(26, 26, 26, 0.85);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+  }
+
+  .back-btn {
+    pointer-events: auto;
+    background: rgba(26, 26, 26, 0.9);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .print-btn-wrap {
+    position: fixed;
+    right: max(12px, env(safe-area-inset-right));
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 2147483647;
+    max-width: calc(100vw - 24px);
+  }
+
+  .print-btn {
+    background: var(--coral);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(255,107,107,0.4);
+    white-space: nowrap;
+  }
+
+  /* SCREEN RESPONSIVE */
+  @media screen and (max-width: 900px) {
+    body {
+      padding: 20px 10px;
+      align-items: stretch;
+    }
+
+    .app-header {
+      width: calc(100vw - 12px);
+      left: 6px;
+      transform: none;
+      justify-content: flex-start;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 100vw;
+      min-height: auto;
+      margin-bottom: 12px;
+      overflow: visible;
+      border-radius: 10px;
+    }
+
+    .page[style*="padding: 60px 56px 80px"] {
+      padding: 32px 18px 24px !important;
+      justify-content: flex-start !important;
+    }
+
+    .page[style*="padding: 52px 56px 80px"],
+    .page[style*="padding: 52px 56px 88px"] {
+      padding: 28px 18px 24px !important;
+    }
+
+    .page-footer {
+      position: static;
+      margin-top: 24px;
+      padding: 0;
+    }
+
+    .t-display { letter-spacing: -0.8px; }
+    .t-h1 { font-size: 24px; }
+    .t-h2 { font-size: 16px; }
+    .t-body { font-size: 13px; line-height: 1.55; }
+
+    .code-block,
+    .tip-box {
+      padding: 12px 14px;
+    }
+
+    table {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    th,
+    td {
+      white-space: normal;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    /* Stack card rows */
+    div[style*="display:flex; gap:12px"],
+    div[style*="display: flex; gap: 12px"],
+    div[style*="display:flex; gap:14px"],
+    div[style*="display: flex; gap: 14px"],
+    div[style*="display:flex; align-items: stretch; gap: 0;"],
+    div[style*="display: flex; align-items: stretch; gap: 0;"] {
+      flex-direction: column !important;
+    }
+
+    div[style*="display: grid; grid-template-columns: 1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+
+    /* Keep step headers horizontal */
+    div[style*="display: flex; align-items: center; gap: 14px;"] {
+      flex-direction: row !important;
+      flex-wrap: wrap;
+    }
+    div[style*="display: flex; align-items: center; gap: 14px; margin-bottom: 36px;"] {
+      flex-wrap: nowrap;
+    }
+
+    /* Better mobile hierarchy for large inline titles */
+    .t-display[style*="font-size:58px"] { font-size: 40px !important; line-height: 1.1 !important; }
+    .t-display[style*="font-size: 36px"] { font-size: 30px !important; line-height: 1.12 !important; }
+    .t-display[style*="font-size: 34px"] { font-size: 28px !important; line-height: 1.14 !important; }
+    .t-display[style*="font-size: 32px"] { font-size: 27px !important; line-height: 1.14 !important; }
+    .t-display[style*="font-size: 30px"] { font-size: 25px !important; line-height: 1.15 !important; }
+
+    /* Long horizontal sections */
+    div[style*="display:flex; border-bottom:1px solid var(--border);"] {
+      flex-direction: column !important;
+    }
+    div[style*="background: var(--surface); border-radius: 10px; overflow:hidden; margin-bottom: 26px;"] > div[style*="display:flex"] {
+      flex-direction: column !important;
+    }
+    div[style*="width:190px; flex-shrink:0;"] {
+      width: 100% !important;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Avoid overflow in special sections */
+    div[style*="width:220px; flex-shrink:0;"] {
+      width: 100% !important;
+    }
+    div[style*="flex:1; font-size:12.5px; color:var(--text-muted); line-height:1.7; padding-top:4px;"] {
+      width: 100% !important;
+      padding-top: 10px !important;
+    }
+    div[style*="width: 346px;"] {
+      width: 100% !important;
+    }
+
+    div[style*="position: absolute; bottom: 60px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;"] {
+      position: static !important;
+      margin-top: 24px;
+    }
+  }
+
+  @media screen and (max-width: 640px) {
+    body {
+      padding: 10px 6px;
+    }
+
+    .page {
+      border-radius: 8px;
+    }
+
+    .paso-badge {
+      width: 30px;
+      height: 30px;
+      font-size: 13px;
+    }
+
+    .score-badge {
+      font-size: 12px;
+      padding: 5px 10px;
+    }
+
+    .step-row {
+      gap: 10px;
+      padding: 9px 0;
+    }
+
+    .step-num {
+      width: 20px;
+      font-size: 10px;
+    }
+
+    tbody td,
+    thead th {
+      padding-left: 10px;
+      padding-right: 10px;
+      font-size: 11px;
+    }
+
+    .t-mono {
+      font-size: 10.5px;
+    }
+
+    .code-block {
+      font-size: 10.5px;
+      line-height: 1.55;
+    }
+
+    .print-btn-wrap {
+      right: max(10px, env(safe-area-inset-right)) !important;
+      bottom: max(10px, env(safe-area-inset-bottom)) !important;
+      max-width: calc(100vw - 20px);
+    }
+
+    .print-btn {
+      padding: 10px 14px !important;
+      font-size: 12px !important;
+      white-space: nowrap;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .header-title {
+      font-size: 10px;
+      padding: 7px 10px;
+      max-width: calc(100vw - 70px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .back-btn {
+      width: 30px;
+      height: 30px;
+      font-size: 14px;
+    }
+
+    .print-btn {
+      padding: 10px 12px !important;
+      font-size: 11px !important;
+    }
+
+    .print-btn-label::before {
+      content: " PDF";
+    }
+
+    .print-btn-label-full {
+      display: none;
+    }
+  }
+
+  /* PRINT */
+  @media print {
+    body { background: #1A1A1A; padding: 0; gap: 0; }
+    .page { margin: 0; page-break-after: always; width: 100%; min-height: 100vh; }
+    .app-header,
+    .print-btn-wrap { display: none !important; }
+    @page { margin: 0; size: A4 portrait; background: #1A1A1A; }
+  }
+</style>
+
+
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 1 &mdash; COVER -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+
+
+<div class="page" style="justify-content: center; padding: 60px 56px 80px;" data-cc-id="cc-14">
+  <!-- Geometric decoration -->
+  <div class="geo-circle" style="width:500px;height:500px;right:-140px;top:-80px;"></div>
+  <div class="geo-circle" style="width:200px;height:200px;left:-60px;bottom:100px;"></div>
+
+  <!-- Badge -->
+  <div style="margin-bottom: 36px;">
+
+    <button class="back-btn" aria-label="Volver al proyecto" title="Volver al proyecto" onclick="window.history.length > 1 ? window.history.back() : window.location.assign('./');">
+      ←
+    </button>
+    <span style="border:1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-family:'DM Mono',monospace; font-size:11px; color: var(--text-muted); letter-spacing: 0.5px;">
+      Workshop &#xB7; Valencia 2026
+    </span>
+  </div>
+
+  <!-- Main title -->
+  <div class="t-display" style="font-size:58px; color: var(--text); margin-bottom: 16px; max-width: 580px;">
+    Visualizaci&#xF3;n<br>de Datos<br><span class="coral">con IA</span>
+  </div>
+
+  <div style="font-size: 18px; font-weight: 300; color: var(--text-muted); margin-bottom: 52px; letter-spacing: 0.3px;">
+    Tu mercado de empleo, analizado en 2 horas
+  </div>
+
+  <!-- Pipeline visual on cover -->
+  <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); border-radius: 12px; padding: 18px 24px; margin-bottom: 52px; width: 346px;" data-cc-id="cc-12">
+    <span data-emoji="doc" style="font-size:22px;"></span>
+    <span data-emoji="csv" style="font-size:22px;"></span>
+    <span style="font-family: &quot;DM Mono&quot;, monospace; font-size: 13px; color: var(--text-muted); margin: 0px 4px;" data-cc-id="cc-13"><br></span>
+    <span style="color: rgb(255, 107, 107); font-size: 18px; margin: 0px 6px;" data-cc-id="cc-11">&#x2192;</span>
+    <span style="font-size: 20px; background: rgba(255,107,107,0.15); padding: 6px 10px; border-radius: 8px; border: 1px solid rgba(255,107,107,0.3);"><span data-emoji="robot" style="font-size:22px;"></span></span>
+    <span style="color: var(--coral); font-size: 18px; margin: 0px 6px;" data-cc-id="cc-10">&#x2192;</span>
+    <span style="font-size: 20px;"><span data-emoji="csv" style="font-size:22px;"></span></span>
+    <span style="font-family:'DM Mono',monospace; font-size: 12px; color: var(--coral); margin-left: 12px;">pipeline</span>
+  </div>
+
+  <!-- Facilitatrice -->
+  <div style="display: flex; align-items: center; gap: 14px;" data-cc-id="cc-17">
+    <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--coral); opacity:0.9; display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:16px; color:#fff;">S</div>
+    <div>
+      <div style="font-size:13px; font-weight:500;">S&#xE9;vi</div>
+      <div style="font-size:11.5px; color: var(--text-muted);">Fundadora de root_ &#xB7; Product Operations Manager</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">01 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 2 &mdash; EL PIPELINE -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;" data-cc-id="cc-8">
+  <div class="geo-circle" style="width:300px;height:300px;right:-80px;bottom:60px;"></div>
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">El pipeline que vas a usar hoy</div>
+  <div class="t-display" style="font-size: 36px; margin-bottom: 44px;">Tres herramientas.<br>Un resultado.</div>
+
+  <!-- Big pipeline visual -->
+  <div style="display: flex; align-items: stretch; gap: 0; margin-bottom: 40px;">
+
+    <!-- Block 1 -->
+    <div class="pipeline-block" style="border-radius: 10px 0 0 10px;">
+      <div style="font-size: 22px; margin-bottom: 8px;" data-cc-id="cc-6"><span data-emoji="doc" style="font-size:22px;"></span> + <span data-emoji="csv" style="font-size:22px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom: 6px;">Google Sheets</div>
+      <div style="font-size:12px; color: var(--text-muted); line-height:1.5;">Recoge y filtra las ofertas del mercado. Exporta tu selecci&#xF3;n en CSV.</div>
+      <div style="margin-top: 12px;">
+        <span style="font-family:'DM Mono',monospace; font-size:10px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 4px;">sheets.google.com</span>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div style="display:flex; align-items:center; padding: 0 6px; background: var(--surface);" data-cc-id="cc-3">
+      <svg width="28" height="16" viewBox="0 0 28 16" fill="none">
+        <path d="M0 8 H20 M14 2 L22 8 L14 14" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+
+    <!-- Block 2 (accent) -->
+    <div class="pipeline-block accent" style="border-radius: 0;">
+      <div style="font-size: 22px; margin-bottom: 8px;"><span data-emoji="robot" style="font-size:22px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom: 6px; color: var(--coral);">Claude API</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" data-cc-id="cc-2">La IA compara tu CV con cada oferta y calcula un score de matching 0&#x2013;100.</div>
+      <div style="margin-top: 12px;">
+        <span style="font-family:'DM Mono',monospace; font-size:10px; color: var(--coral); background: rgba(255,107,107,0.1); padding: 3px 8px; border-radius: 4px;">anthropic.com</span>
+      </div>
+    </div>
+
+    <!-- Arrow -->
+    <div style="display: flex; align-items: center; padding: 0 6px; background: rgb(46, 46, 46);" data-cc-id="cc-4">
+      <svg width="28" height="16" viewBox="0 0 28 16" fill="none">
+        <path d="M0 8 H20 M14 2 L22 8 L14 14" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+
+    <!-- Block 3 -->
+    <div class="pipeline-block" style="border-radius: 0 10px 10px 0;" data-cc-id="cc-7">
+      <div style="font-size: 22px; margin-bottom: 8px;"><span data-emoji="csv" style="font-size:22px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom: 6px;">Flourish</div>
+      <div style="font-size:12px; color: var(--text-muted); line-height:1.5;">Visualizaci&#xF3;n interactiva con un link compartible. Sin c&#xF3;digo.</div>
+      <div style="margin-top: 12px;">
+        <span style="font-family:'DM Mono',monospace; font-size:10px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 3px 8px; border-radius: 4px;">flourish.studio</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- What you'll have -->
+  <div class="t-h2" style="font-size: 13px; letter-spacing: 0.5px; margin-bottom: 16px; color: var(--text-muted);" data-cc-id="cc-5">AL FINAL DE LA SESI&#xD3;N TENDR&#xC1;S</div>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <div style="color: var(--coral); font-size:16px; flex-shrink:0; margin-top:1px;">&#x2192;</div>
+      <div class="t-body" style="font-size:13px;">Un <strong>an&#xE1;lisis personalizado</strong> de 10&#x2013;15 ofertas comparadas con tu CV</div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <div style="color: var(--coral); font-size:16px; flex-shrink:0; margin-top:1px;">&#x2192;</div>
+      <div class="t-body" style="font-size:13px;">Un <strong>score de matching</strong> (0&#x2013;100) para cada oferta</div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <div style="color: var(--coral); font-size:16px; flex-shrink:0; margin-top:1px;">&#x2192;</div>
+      <div class="t-body" style="font-size:13px;">La lista de <strong>skills que te faltan</strong> y las que ya tienes</div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:flex-start;">
+      <div style="color: var(--coral); font-size:16px; flex-shrink:0; margin-top:1px;">&#x2192;</div>
+      <div class="t-body" style="font-size:13px;">Un <strong>dashboard visual</strong> con link compartible</div>
+    </div>
+  </div>
+
+  <!-- 3 recursos -->
+  <div class="divider" style="margin-top: 28px;"></div>
+  <div class="t-h2" style="font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;">Los 3 recursos que necesitas ahora</div>
+  <div style="display: flex; gap: 12px;">
+    <div style="flex:1; background: var(--surface); border-radius: 8px; padding: 14px 16px; display:flex; gap:12px; align-items:center;">
+      <div style="width:26px; height:26px; border-radius:50%; background: var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:12px; color:#fff; flex-shrink:0;">1</div>
+      <div><div style="font-size:12px; font-weight:500;">Google Sheet template</div><div style="font-size:11px; color:var(--text-muted);">Link en el chat &#x2192; Archivo &#x2192; Hacer una copia</div></div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 8px; padding: 14px 16px; display:flex; gap:12px; align-items:center;">
+      <div style="width:26px; height:26px; border-radius:50%; background: var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:12px; color:#fff; flex-shrink:0;">2</div>
+      <div><div style="font-size:12px; font-weight:500;">Herramienta IA</div><div style="font-size:11px; color:var(--text-muted);">Link en el chat</div></div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 8px; padding: 14px 16px; display:flex; gap:12px; align-items:center;">
+      <div style="width:26px; height:26px; border-radius:50%; background: var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:12px; color:#fff; flex-shrink:0;">3</div>
+      <div><div style="font-size:12px; font-weight:500;">Clave API</div><div style="font-size:11px; color:var(--text-muted);">La facilitadora te la dar&#xE1; oralmente</div></div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">02 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 3 &mdash; PASO 01 -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <!-- Header -->
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 36px;">
+    <div class="paso-badge">1</div>
+    <div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:24px; color: var(--coral); letter-spacing: -0.5px;">PASO 01</div>
+      <div style="font-size: 14px; color: var(--text-muted);">Tu Google Sheet</div>
+    </div>
+  </div>
+
+  <!-- 3 actions -->
+  <div style="display: flex; gap: 12px; margin-bottom: 32px;">
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 18px;">
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); margin-bottom:8px; letter-spacing:1px;">ACCI&#xD3;N 1</div>
+      <div style="font-size:13px; font-weight:500; margin-bottom: 6px;">Hacer una copia</div>
+      <div style="font-size:12px; color:var(--text-muted); line-height:1.5;">Abre el link &#x2192; <strong style="color:var(--text);">Archivo &#x2192; Hacer una copia</strong>. El archivo es tuyo. Nadie m&#xE1;s puede verlo.</div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 18px;">
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); margin-bottom:8px; letter-spacing:1px;">ACCI&#xD3;N 2</div>
+      <div style="font-size:13px; font-weight:500; margin-bottom: 6px;">Revisar ofertas</div>
+      <div style="font-size: 12px; color: var(--text-muted); line-height: 1.5;" data-cc-id="cc-1">Ve a <strong style="color:var(--text);"><span data-emoji="csv" style="font-size:22px;"></span> Ofertas del Mercado</strong>. Hay 15 ofertas Data/Analytics en Espa&#xF1;a.&nbsp;</div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 18px;">
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); margin-bottom:8px; letter-spacing:1px;">ACCI&#xD3;N 3</div>
+      <div style="font-size:13px; font-weight:500; margin-bottom: 6px;">Exportar CSV</div>
+      <div style="font-size:12px; color:var(--text-muted); line-height:1.5;"><strong style="color:var(--text);">Archivo &#x2192; Descargar &#x2192; CSV</strong>. Guarda el archivo, lo usar&#xE1;s en el Paso 02.</div>
+    </div>
+  </div>
+
+  <!-- Tabs table -->
+  <div class="t-h2" style="font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Las 5 pesta&#xF1;as del Sheet</div>
+  <table style="margin-bottom: 24px;">
+    <thead>
+      <tr>
+        <th style="width:40px;">#</th>
+        <th>Pesta&#xF1;a</th>
+        <th>Descripci&#xF3;n</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="t-mono">01</span></td>
+        <td><strong><span data-emoji="clipboard" style="font-size:20px;"></span> Instrucciones</strong></td>
+        <td style="color:var(--text-muted);">Este mismo proceso, paso a paso</td>
+      </tr>
+      <tr>
+        <td><span class="t-mono">02</span></td>
+        <td><strong><span data-emoji="csv" style="font-size:22px;"></span> Ofertas del Mercado</strong></td>
+        <td style="color: var(--text-muted);" data-cc-id="cc-2">15 ofertas Data/Analytics en Espa&#xF1;a ya cargadas</td>
+      </tr>
+      <tr>
+        <td><span class="t-mono">03</span></td>
+        <td><strong><span data-emoji="memo" style="font-size:20px;"></span> Mi Tracker</strong></td>
+        <td style="color:var(--text-muted);">Para hacer seguimiento de tus candidaturas</td>
+      </tr>
+      <tr>
+        <td><span class="t-mono">04</span></td>
+        <td><strong><span data-emoji="robot" style="font-size:22px;"></span> An&#xE1;lisis IA</strong></td>
+        <td style="color:var(--text-muted);">Donde pegar&#xE1;s los resultados del an&#xE1;lisis</td>
+      </tr>
+      <tr>
+        <td><span class="t-mono">05</span></td>
+        <td><strong><span data-emoji="chart" style="font-size:20px;"></span> Dashboard</strong></td>
+        <td style="color:var(--text-muted);">Gu&#xED;a para crear tu visualizaci&#xF3;n en Flourish</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Tip -->
+  <div class="tip-box">
+    <div class="tip-label">Columnas importantes</div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px;">
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">T&#xED;tulo</span>
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">Empresa</span>
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">Ciudad</span>
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">Salario</span>
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">Skills</span>
+      <span style="background:rgba(255,107,107,0.12); border-radius:4px; padding:3px 10px; font-size:12px; font-family:'DM Mono',monospace; color: var(--coral);">Remoto / H&#xED;brido / Presencial</span>
+    </div>
+    <div style="font-size:12px; color: var(--text-muted); margin-top: 8px;">Puedes a&#xF1;adir nuevas ofertas desde LinkedIn o InfoJobs en las filas vac&#xED;as.</div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">03 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 4 &mdash; PASO 02 -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;" data-cc-id="cc-3">
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 36px;">
+    <div class="paso-badge">2</div>
+    <div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:24px; color: var(--coral); letter-spacing: -0.5px;">PASO 02</div>
+      <div style="font-size: 14px; color: var(--text-muted);">La herramienta IA</div>
+    </div>
+  </div>
+
+  <!-- 3 inputs -->
+  <div style="display: flex; gap: 12px; margin-bottom: 28px;">
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 16px;">
+      <div style="font-size: 20px; margin-bottom: 8px;"><span data-emoji="key" style="font-size:20px;"></span></div>
+      <div style="font-size:12px; font-weight:500; margin-bottom:4px;">Clave API</div>
+      <div style="font-size:11.5px; color:var(--text-muted);">Introduce la clave que te ha dado la facilitadora</div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 16px;">
+      <div style="font-size: 20px; margin-bottom: 8px;"><span data-emoji="doc" style="font-size:22px;"></span></div>
+      <div style="font-size:12px; font-weight:500; margin-bottom:4px;">Subir CV</div>
+      <div style="font-size:11.5px; color:var(--text-muted);">Tu CV en PDF &#x2014; m&#xE1;ximo 10 MB</div>
+    </div>
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 16px;">
+      <div style="font-size: 20px; margin-bottom: 8px;"><span data-emoji="csv" style="font-size:22px;"></span></div>
+      <div style="font-size:12px; font-weight:500; margin-bottom:4px;">Subir ofertas</div>
+      <div style="font-size:11.5px; color:var(--text-muted);">El CSV exportado del Paso 01, o pega el texto directamente</div>
+    </div>
+  </div>
+
+  <!-- El prompt -->
+  <div class="t-h2" style="font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">El prompt</div>
+  <div style="font-size:12.5px; color:var(--text-muted); margin-bottom: 10px;">Antes de lanzar el an&#xE1;lisis, haz clic en <strong style="color:var(--text);">&#x1F9E0; Ver y editar el prompt de Claude</strong>. Ver&#xE1;s exactamente las instrucciones que recibe la IA:</div>
+
+  <div class="code-block" style="margin-bottom: 24px;">
+    Eres un experto en an&#xE1;lisis del mercado laboral espa&#xF1;ol...<br>
+    Calcula un score de matching (0&#x2013;100) basado en:<br>
+    &nbsp;&nbsp;- Coincidencia de skills t&#xE9;cnicas &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(40%)<br>
+    &nbsp;&nbsp;- Nivel de experiencia requerido &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(25%)<br>
+    &nbsp;&nbsp;- Tipo de rol &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(20%)<br>
+    &nbsp;&nbsp;- Condiciones: salario, remoto, ciudad &nbsp;(15%)<br>
+    Responde &#xDA;NICAMENTE con este JSON...
+  </div>
+
+  <!-- Prompt Engineering definition -->
+  <div style="border: 1.5px solid var(--coral); border-radius: 10px; padding: 18px 20px; background: rgba(255,107,107,0.05); margin-bottom: 28px;">
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--coral); margin-bottom:8px;">Prompt Engineering</div>
+    <div style="font-size:13px; line-height:1.65; font-weight:300;">
+      El arte de dar instrucciones precisas a una IA para obtener outputs predecibles. Puedes modificar los porcentajes, a&#xF1;adir criterios, cambiar el idioma. <strong style="color:var(--text);">Experimenta.</strong>
+    </div>
+  </div>
+
+  <!-- Launch steps -->
+  <div class="t-h2" style="font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">Lanza el an&#xE1;lisis</div>
+  <div>
+    <div class="step-row">
+      <div class="step-num">01</div>
+      <div style="font-size:13px;">Clave API introducida <span class="coral">&#x2713;</span></div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">02</div>
+      <div style="font-size:13px;">CV subido <span class="coral">&#x2713;</span></div>
+    </div>
+    <div class="step-row">
+      <div class="step-num">03</div>
+      <div style="font-size:13px;">Ofertas subidas o pegadas <span class="coral">&#x2713;</span></div>
+    </div>
+    <div class="step-row" style="border:none;">
+      <div class="step-num">04</div>
+      <div style="font-size:13px;">Clic en <strong style="color:var(--coral);"><span data-emoji="lightning" style="font-size:18px;"></span> Analizar con Claude</strong> &#x2014; el an&#xE1;lisis tarda entre 15 y 30 segundos</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">04 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 5 &mdash; PASO 03 RESULTADOS -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 36px;" data-cc-id="cc-9">
+    <div class="paso-badge">3</div>
+    <div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:24px; color: var(--coral); letter-spacing: -0.5px;">PASO 03</div>
+      <div style="font-size: 14px; color: var(--text-muted);">Tus resultados</div>
+    </div>
+  </div>
+
+  <!-- 3 columns -->
+  <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 30px;">
+
+    <div style="background: var(--surface); border-radius: 10px; padding: 20px;" data-cc-id="cc-6">
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">M&#xE9;tricas globales</div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:10px;">Ofertas recomendadas <span class="coral" style="float:right; font-family:'DM Mono',monospace;">N</span></div>
+        <div style="font-size:12px; border-bottom:1px solid var(--border); padding-bottom:10px;">Score medio <span class="coral" style="float:right; font-family:'DM Mono',monospace;">0&#x2013;100</span></div>
+        <div style="font-size:12px;">% ofertas en remoto <span class="coral" style="float:right; font-family:'DM Mono',monospace;">%</span></div>
+      </div>
+    </div>
+
+    <div style="background: var(--surface); border-radius: 10px; padding: 20px; border: 1px solid var(--border);" data-cc-id="cc-7">
+      <div style="font-family: Montserrat, sans-serif; font-weight: 700; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px;" data-cc-id="cc-5">Por oferta</div>
+      <!-- Score example -->
+      <div style="background: var(--bg); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+          <div style="font-size:12px; font-weight:500;">Data Analyst &#xB7; Telef&#xF3;nica</div>
+          <span class="score-badge">87 &#x2713; Aplicar</span>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom: 6px;">Skills que encajan: <span style="color:var(--text);">Python, SQL, Tableau</span></div>
+        <div style="font-size:11px; color:var(--text-muted);">Skills que te faltan: <span style="color:#FFB347;">dbt, Airflow</span></div>
+      </div>
+      <div style="background: var(--bg); border-radius: 8px; padding: 12px 14px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:6px;">
+          <div style="font-size:12px; font-weight:500;">ML Engineer &#xB7; Cabify</div>
+          <span class="score-badge score-no" data-cc-id="cc-4">41 &#x2715; No aplicar</span>
+        </div>
+        <div style="font-size:11px; color:var(--text-muted);">Requiere 5+ a&#xF1;os de experiencia en MLOps</div>
+      </div>
+    </div>
+
+    <div style="flex:1; background: var(--surface); border-radius: 10px; padding: 20px;" data-cc-id="cc-8">
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;" contenteditable="true">An&#xE1;lisis del mercado</div>
+      <div style="display:flex; flex-direction:column; gap:9px; font-size:12px; color:var(--text-muted);">
+        <div style="border-bottom:1px solid var(--border); padding-bottom:9px;">Distribuci&#xF3;n por ciudad</div>
+        <div style="border-bottom:1px solid var(--border); padding-bottom:9px;">Skills m&#xE1;s demandadas</div>
+        <div>An&#xE1;lisis estrat&#xE9;gico personalizado</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Exportar -->
+  <div style="background: var(--surface); border-radius: 10px; padding: 20px 22px; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <div style="font-size:13px; font-weight:500; margin-bottom:4px;">Exporta tus resultados</div>
+      <div style="font-size:12px; color:var(--text-muted);">Guarda el archivo &#x2014; lo usar&#xE1;s en el Paso 04 para crear tu dashboard en Flourish.</div>
+    </div>
+    <div style="background: var(--coral); border-radius: 8px; padding: 10px 18px; font-size:13px; font-weight:600; color:#fff; white-space:nowrap; cursor:default; flex-shrink:0;">
+      &#x2193; Exportar CSV
+    </div>
+  </div>
+
+  <!-- Tracker note -->
+  <div class="divider"></div>
+  <div class="tip-box">
+    <div class="tip-label">Bonus &#x2014; Mi Tracker de candidaturas</div>
+    <div style="font-size:12px; color:var(--text-muted); margin-top:4px;">La pesta&#xF1;a <strong style="color:var(--text);"><span data-emoji="memo" style="font-size:20px;"></span> Mi Tracker</strong> es para usar a partir de ma&#xF1;ana. Registra empresa, t&#xED;tulo, fecha, estado, contacto y notas. El Sheet calcula autom&#xE1;ticamente tu tasa de respuesta y n&#xFA;mero de entrevistas.</div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">05 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 6 &mdash; PASO 04 FLOURISH -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 36px;">
+    <div class="paso-badge">4</div>
+    <div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:24px; color: var(--coral); letter-spacing: -0.5px;">PASO 04</div>
+      <div style="font-size: 14px; color: var(--text-muted);">Tu dashboard en Flourish</div>
+    </div>
+  </div>
+
+  <!-- 7 steps compact -->
+  <div class="t-h2" style="font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:14px;">C&#xF3;mo crear tu primera visualizaci&#xF3;n</div>
+  <div style="margin-bottom: 30px;">
+    <div class="step-row"><div class="step-num">01</div><div style="font-size: 13px;" data-cc-id="cc-9">Ve a <strong style="color:var(--coral);">flourish.studio</strong> &#x2014; gratuito, no necesitas cuenta para empezar</div></div>
+    <div class="step-row"><div class="step-num">02</div><div style="font-size:13px;">Haz clic en <strong style="color:var(--text);">New visualization</strong></div></div>
+    <div class="step-row"><div class="step-num">03</div><div style="font-size:13px;">Elige el tipo de gr&#xE1;fico que quieres</div></div>
+    <div class="step-row"><div class="step-num">04</div><div style="font-size:13px;">En la pesta&#xF1;a <strong style="color:var(--text);">Data</strong>, haz clic en <strong style="color:var(--text);">Upload data</strong></div></div>
+    <div class="step-row"><div class="step-num">05</div><div style="font-size:13px;">Sube tu CSV de resultados</div></div>
+    <div class="step-row"><div class="step-num">06</div><div style="font-size:13px;">Mapea las columnas (Label, Value, Color) y personaliza en la pesta&#xF1;a <strong style="color:var(--text);">Preview</strong></div></div>
+    <div class="step-row" style="border:none;"><div class="step-num">07</div><div style="font-size:13px;">Haz clic en <strong style="color:var(--coral);">Export &amp; publish</strong> &#x2192; obtienes tu link compartible</div></div>
+  </div>
+
+  <!-- 4 viz table -->
+  <div class="t-h2" style="font-size:12px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">4 visualizaciones recomendadas</div>
+  <table>
+    <thead>
+      <tr>
+        <th>Visualizaci&#xF3;n</th>
+        <th>Tipo de gr&#xE1;fico</th>
+        <th>Columnas a usar</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Skills m&#xE1;s demandadas</strong></td>
+        <td><span class="t-mono">Bar chart</span></td>
+        <td style="color:var(--text-muted);">Skills_Match</td>
+      </tr>
+      <tr>
+        <td><strong>Ofertas por ciudad</strong></td>
+        <td><span class="t-mono">Map</span></td>
+        <td style="color:var(--text-muted);">Ciudad + Score</td>
+      </tr>
+      <tr>
+        <td><strong>Score vs Salario</strong></td>
+        <td><span class="t-mono">Scatter plot</span></td>
+        <td style="color:var(--text-muted);">Salario + Score</td>
+      </tr>
+      <tr>
+        <td><strong>Aplicar s&#xED;/no</strong></td>
+        <td><span class="t-mono">Pie chart</span></td>
+        <td style="color:var(--text-muted);">Aplicar</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">06 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 7 &mdash; QU&Eacute; HICE HOY -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div class="geo-circle" style="width:400px;height:400px;right:-100px;top:-80px;"></div>
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Reflexi&#xF3;n final</div>
+  <div class="t-display" style="font-size: 32px; margin-bottom: 44px;">&#xBF;Qu&#xE9; hice hoy,<br>exactamente?</div>
+
+  <!-- Timeline -->
+  <div style="padding-left: 4px;">
+    <div class="timeline-item">
+      <div class="tl-num">1</div>
+      <div style="padding-top: 6px;">
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; margin-bottom:4px;">Recogiste datos</div>
+        <div style="font-size:13px; color:var(--text-muted);">de un mercado real</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-num">2</div>
+      <div style="padding-top: 6px;">
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; margin-bottom:4px;">Definiste criterios</div>
+        <div style="font-size:13px; color:var(--text-muted);">de an&#xE1;lisis mediante un prompt</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-num">3</div>
+      <div style="padding-top: 6px;">
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; margin-bottom:4px;">Ejecutaste una llamada a una API</div>
+        <div style="font-size:13px; color:var(--text-muted);">de IA sin escribir c&#xF3;digo</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="tl-num">4</div>
+      <div style="padding-top: 6px;">
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; margin-bottom:4px;">Estructuraste el output</div>
+        <div style="font-size:13px; color:var(--text-muted);">en datos procesables</div>
+      </div>
+    </div>
+    <div class="timeline-item" style="padding-bottom:0;">
+      <div class="tl-num">5</div>
+      <div style="padding-top: 6px;">
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; margin-bottom:4px;">Visualizaste</div>
+        <div style="font-size:13px; color:var(--text-muted);">para tomar decisiones</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Big quote -->
+  <div style="margin-top: 36px; border-top: 1px solid var(--border); padding-top: 28px;">
+    <div style="font-family:'DM Sans',sans-serif; font-style:italic; font-size:17px; line-height:1.6; color: var(--coral); font-weight:300;">
+      "Esto es exactamente lo que hace un Data Analyst o Product Analyst en una empresa real. La diferencia es que hoy lo hiciste en 2 horas, con herramientas accesibles, y el resultado es tuyo."
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">07 / 08</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 8 &mdash; RECURSOS + CONTACTO -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div class="geo-circle" style="width:350px;height:350px;left:-80px;bottom:40px;"></div>
+
+  <div class="t-display" style="font-size: 32px; margin-bottom: 8px;">Recursos<br>para seguir</div>
+  <div style="font-size:14px; color:var(--text-muted); margin-bottom: 36px;">Todo lo que necesitas para continuar despu&#xE9;s del workshop.</div>
+
+  <!-- Resources table -->
+  <table style="margin-bottom: 40px;">
+    <thead>
+      <tr>
+        <th>Recurso</th>
+        <th>Link</th>
+        <th>Para qu&#xE9; sirve</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Herramienta IA</strong></td>
+        <td><span class="t-mono" style="color:var(--coral);">El link que tienes</span></td>
+        <td style="color:var(--text-muted);">Para seguir analizando ofertas</td>
+      </tr>
+      <tr>
+        <td><strong>Documentaci&#xF3;n Claude API</strong></td>
+        <td><span class="t-mono" style="color:var(--coral);">docs.anthropic.com</span></td>
+        <td style="color:var(--text-muted);">Referencia t&#xE9;cnica completa</td>
+      </tr>
+      <tr>
+        <td><strong>Flourish</strong></td>
+        <td><span class="t-mono" style="color:var(--coral);">flourish.studio</span></td>
+        <td style="color:var(--text-muted);">Visualizaciones interactivas</td>
+      </tr>
+      <tr>
+        <td><strong>Datawrapper</strong></td>
+        <td><span class="t-mono" style="color:var(--coral);">datawrapper.de</span></td>
+        <td style="color:var(--text-muted);">Alternativa a Flourish</td>
+      </tr>
+      <tr>
+        <td><strong>Prompt Engineering Guide</strong></td>
+        <td><span class="t-mono" style="color:var(--coral);">docs.anthropic.com/prompt-engineering</span></td>
+        <td style="color:var(--text-muted);">Para aprender a mejorar prompts</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Contact -->
+  <div style="background: var(--surface); border-radius: 12px; padding: 28px 32px; text-align: center;">
+    <div style="font-size:12px; color:var(--text-muted); margin-bottom: 10px; letter-spacing:1px; text-transform:uppercase; font-family:'Montserrat',sans-serif; font-weight:700;">&#xBF;Preguntas despu&#xE9;s del workshop?</div>
+    <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:24px; color: var(--coral); margin-bottom: 6px; letter-spacing:-0.5px;">hello@tryroot.io</div>
+    <div style="font-size:13px; color:var(--text-muted);">tryroot.io</div>
+  </div>
+
+  <!-- Bottom logo -->
+  <div style="position: absolute; bottom: 60px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; gap: 6px;">
+    <div style="font-family:'Montserrat',sans-serif; font-weight:900; font-size:28px; color: var(--coral); letter-spacing:-1px;">root_</div>
+    <div style="font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace;">Workshop creado con root_ &#xB7; Valencia 2026</div>
+  </div>
+
+  <div class="page-footer" style="bottom: 28px;">
+    <div class="logo">root_</div>
+    <div class="page-num">08 / 12</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 9 &mdash; &iquest;QU&Eacute; ES UNA API? -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div class="geo-circle" style="width:360px;height:360px;right:-90px;top:-60px;"></div>
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Conceptos clave</div>
+  <div class="t-display" style="font-size: 36px; color: var(--coral); margin-bottom: 8px;">&#xBF;Qu&#xE9; es una API?</div>
+  <div style="font-size: 13.5px; color: var(--text-muted); margin-bottom: 32px; font-weight:300;">La analog&#xED;a del bar</div>
+
+  <!-- Bar metaphor visual -->
+  <div style="display: flex; align-items: stretch; gap: 0; margin-bottom: 28px;">
+
+    <div style="flex:1; background: var(--surface); border-radius: 10px 0 0 10px; padding: 22px 18px; display:flex; flex-direction:column; gap:8px;">
+      <div style="font-size: 26px;"><span data-emoji="people" style="font-size:26px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; margin-bottom:4px;">Tus amigos</div>
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral);">tu aplicaci&#xF3;n</div>
+      <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5; margin-top:4px;">Cada uno tiene su pedido. No van individualmente a la barra.</div>
+    </div>
+
+    <div style="display:flex; align-items:center; padding: 0 8px; background: var(--surface); border-left: 1px solid var(--border); border-right: 1px solid var(--border);">
+      <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
+        <path d="M0 8 H24 M18 2 L26 8 L18 14" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+
+    <div style="flex:1.2; background: rgba(255,107,107,0.08); border: 1.5px solid var(--coral); padding: 22px 18px; display:flex; flex-direction:column; gap:8px;">
+      <div style="font-size: 26px;"><span data-emoji="suit" style="font-size:26px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; margin-bottom:4px; color:var(--coral);">El amigo mensajero</div>
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral);">la API</div>
+      <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5; margin-top:4px;">Recoge los pedidos, va a la barra, habla en el idioma correcto, y vuelve con todo.</div>
+    </div>
+
+    <div style="display:flex; align-items:center; padding: 0 8px; background: rgba(255,107,107,0.04); border-top: 1.5px solid var(--coral); border-bottom: 1.5px solid var(--coral);">
+      <svg width="32" height="16" viewBox="0 0 32 16" fill="none">
+        <path d="M0 8 H24 M18 2 L26 8 L18 14" stroke="#FF6B6B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+
+    <div style="flex:1; background: var(--surface); border-radius: 0 10px 10px 0; padding: 22px 18px; display:flex; flex-direction:column; gap:8px;">
+      <div style="font-size: 26px;"><span data-emoji="beer" style="font-size:26px;"></span></div>
+      <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:13px; margin-bottom:4px;">El barman</div>
+      <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral);">Claude</div>
+      <div style="font-size:11.5px; color:var(--text-muted); line-height:1.5; margin-top:4px;">No atiende a todos a la vez. Solo entiende pedidos en el formato correcto.</div>
+    </div>
+  </div>
+
+  <!-- Short explanation -->
+  <div style="font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-bottom: 26px; font-weight:300; max-width: 640px;">
+    La API no hace el caf&#xE9;. No sirve la cerveza. Solo <strong style="color:var(--text);">sabe c&#xF3;mo hablar con el barman</strong> &#x2014; en el idioma correcto, en el formato correcto, con las instrucciones exactas que &#xE9;l entiende. Sin API, cada aplicaci&#xF3;n hablar&#xED;a con Claude de una manera diferente. Con API, hay <strong style="color:var(--text);">un &#xFA;nico protocolo</strong>.
+  </div>
+
+  <!-- API key box -->
+  <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 20px 22px;">
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--coral); margin-bottom:10px;">&#xBF;Qu&#xE9; es una clave API?</div>
+    <div style="font-size:13px; color:var(--text-muted); margin-bottom:14px; line-height:1.6;">Tu <strong style="color:var(--text);">carnet de identidad en el bar</strong>. El barman pregunta: "&#xBF;De parte de qui&#xE9;n?" El amigo muestra el carnet. El barman sabe qui&#xE9;n eres, si tienes cuenta, y cu&#xE1;nto puedes consumir.</div>
+    <div class="code-block" style="margin-bottom:14px; font-size:13px; letter-spacing:0.5px;">sk-ant-api03-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div>
+    <div style="display:flex; align-items:flex-start; gap:10px; background: rgba(255,107,107,0.07); border-radius:6px; padding:12px 14px;">
+      <span style="font-size:16px; flex-shrink:0;"><span data-emoji="warning" style="font-size:16px;"></span></span>
+      <div style="font-size:12px; color:var(--text-muted); line-height:1.6;">Es &#xFA;nica, personal y <strong style="color:var(--text);">no se comparte p&#xFA;blicamente</strong>. Nunca la pongas en un repositorio p&#xFA;blico de GitHub ni la env&#xED;es por email. Quien la tenga puede usar tu cuenta y gastar tu dinero.</div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">09 / 12</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 10 &mdash; COMPRAR CR&Eacute;DITOS -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Conceptos clave</div>
+  <div class="t-display" style="font-size: 34px; color: var(--coral); margin-bottom: 36px;">&#xBF;C&#xF3;mo comprar cr&#xE9;ditos<br>en Claude Platform?</div>
+
+  <!-- 4 steps -->
+  <div style="display:flex; flex-direction:column; gap:14px; margin-bottom: 32px;">
+
+    <div style="display:flex; align-items:flex-start; gap:18px; background: var(--surface); border-radius:10px; padding:20px 22px;">
+      <div class="paso-badge" style="flex-shrink:0; margin-top:2px;">1</div>
+      <div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px;">Crea tu cuenta</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">Ve a <span style="font-family:'DM Mono',monospace; color:var(--coral); font-size:12px;">console.anthropic.com</span> y reg&#xED;strate con tu email.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:flex-start; gap:18px; background: var(--surface); border-radius:10px; padding:20px 22px;">
+      <div class="paso-badge" style="flex-shrink:0; margin-top:2px;">2</div>
+      <div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px;">A&#xF1;ade cr&#xE9;ditos</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">En el men&#xFA; lateral: <span style="font-family:'DM Mono',monospace; color:var(--text); font-size:12px;">Billing &#x2192; Add credits</span>. Puedes empezar con 5$ &#x2014; es suficiente para miles de llamadas con claude-haiku.</div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:flex-start; gap:18px; background: var(--surface); border-radius:10px; padding:20px 22px;">
+      <div class="paso-badge" style="flex-shrink:0; margin-top:2px;">3</div>
+      <div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px;">Genera tu clave API</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">En el men&#xFA; lateral: <span style="font-family:'DM Mono',monospace; color:var(--text); font-size:12px;">API Keys &#x2192; Create Key</span>. Dale un nombre descriptivo, por ejemplo: <span style="font-family:'DM Mono',monospace; color:var(--coral); font-size:12px;">workshop-dataviz</span></div>
+      </div>
+    </div>
+
+    <div style="display:flex; align-items:flex-start; gap:18px; background: var(--surface); border-radius:10px; padding:20px 22px;">
+      <div class="paso-badge" style="flex-shrink:0; margin-top:2px;">4</div>
+      <div>
+        <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:14px; margin-bottom:5px;">Copia y usa</div>
+        <div style="font-size:13px; color:var(--text-muted); line-height:1.5;">Pega la clave en el campo de la herramienta. Empieza a llamar a la API.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tip box -->
+  <div style="border: 1.5px solid var(--coral); border-radius: 10px; padding: 20px 24px; background: rgba(255,107,107,0.05);">
+    <div style="font-family:'Montserrat',sans-serif; font-weight:700; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--coral); margin-bottom:10px;"><span data-emoji="bulb" style="font-size:20px;"></span> &#xBF;Cu&#xE1;nto cuesta?</div>
+    <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:8px;">
+      <span style="font-family:'DM Mono',monospace; font-size:24px; color:var(--coral); font-weight:500;">~0,001$</span>
+      <span style="font-size:13px; color:var(--text-muted);">por an&#xE1;lisis (15 ofertas + CV con claude-haiku)</span>
+    </div>
+    <div style="font-size:13px; color:var(--text-muted); line-height:1.6;">Con <strong style="color:var(--text);">5$</strong> tienes para hacer miles de pruebas. Claude Haiku es el modelo m&#xE1;s r&#xE1;pido y econ&#xF3;mico &#x2014; perfecto para pipelines de datos.</div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">10 / 12</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 11 &mdash; CONSTRUIR UN BUEN PROMPT -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 80px;">
+  <div class="geo-circle" style="width:320px;height:320px;right:-70px;bottom:60px;"></div>
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Prompt Engineering</div>
+  <div class="t-display" style="font-size: 32px; color: var(--coral); margin-bottom: 30px;">&#xBF;C&#xF3;mo construir<br>un buen prompt?</div>
+
+  <!-- 3-part visual -->
+  <div style="display:flex; gap:14px; margin-bottom:30px;">
+    <!-- Stacked blocks -->
+    <div style="display:flex; flex-direction:column; gap:3px; width:220px; flex-shrink:0;">
+      <div style="background: var(--surface); border-radius:8px 8px 0 0; border-left:3px solid var(--coral); padding:14px 16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); letter-spacing:1px; margin-bottom:6px;">ROL</div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5;">"Eres un experto<br>en mercado laboral..."</div>
+      </div>
+      <div style="background: var(--surface); border-left:3px solid var(--coral); padding:14px 16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); letter-spacing:1px; margin-bottom:6px;">TAREA</div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5;">"Analiza este CV<br>y estas ofertas..."</div>
+      </div>
+      <div style="background: var(--surface); border-radius:0 0 8px 8px; border-left:3px solid var(--coral); padding:14px 16px;">
+        <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--coral); letter-spacing:1px; margin-bottom:6px;">FORMATO</div>
+        <div style="font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5;">"Responde &#xDA;NICAMENTE<br>con este JSON..."</div>
+      </div>
+    </div>
+    <!-- Explanation -->
+    <div style="flex:1; font-size:12.5px; color:var(--text-muted); line-height:1.7; padding-top:4px;">
+      Cuando falta una de las tres partes, el output se vuelve impredecible. Claude lee el prompt de arriba a abajo, prioriza lo que est&#xE1; primero, y aplica las restricciones como filtro al final.<br><br>
+      <strong style="color:var(--text);">El rol</strong> activa el contexto correcto.<br>
+      <strong style="color:var(--text);">La tarea</strong> define qu&#xE9; tiene que hacer.<br>
+      <strong style="color:var(--text);">El formato</strong> controla c&#xF3;mo tiene que responder.
+    </div>
+  </div>
+
+  <!-- 5 principles compact -->
+  <div class="t-h2" style="font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:12px;">Los 5 principios</div>
+  <div style="display:flex; flex-direction:column; gap:0;">
+
+    <div class="step-row" style="padding: 11px 0;">
+      <div style="width:22px; height:22px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:11px; color:#fff; flex-shrink:0;">1</div>
+      <div style="flex:1;">
+        <div style="font-size:12.5px; font-weight:500; margin-bottom:4px;">Define el rol antes que la tarea</div>
+        <div style="display:flex; flex-direction:column; gap:3px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:var(--coral);">&#x2715; "Analiza estas ofertas de trabajo"</div>
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#48C78E;">&#x2713; "Eres un experto en mercado laboral espa&#xF1;ol... Analiza..."</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-row" style="padding: 11px 0;">
+      <div style="width:22px; height:22px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:11px; color:#fff; flex-shrink:0;">2</div>
+      <div style="flex:1;">
+        <div style="font-size:12.5px; font-weight:500; margin-bottom:4px;">S&#xE9; espec&#xED;fico con los criterios</div>
+        <div style="display:flex; flex-direction:column; gap:3px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:var(--coral);">&#x2715; "Calcula si encajo con la oferta"</div>
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#48C78E;">&#x2713; "Score 0-100: skills (40%), exp (25%), rol (20%), condiciones (15%)"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-row" style="padding: 11px 0;">
+      <div style="width:22px; height:22px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:11px; color:#fff; flex-shrink:0;">3</div>
+      <div style="flex:1;">
+        <div style="font-size:12.5px; font-weight:500; margin-bottom:4px;">Controla el formato del output</div>
+        <div style="display:flex; flex-direction:column; gap:3px;">
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:var(--coral);">&#x2715; "Dame los resultados"</div>
+          <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#48C78E;">&#x2713; "Responde &#xDA;NICAMENTE con este JSON, sin texto adicional"</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="step-row" style="padding: 11px 0;">
+      <div style="width:22px; height:22px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:11px; color:#fff; flex-shrink:0;">4</div>
+      <div style="flex:1;">
+        <div style="font-size:12.5px; font-weight:500; margin-bottom:4px;">Usa ejemplos cuando puedas</div>
+        <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#48C78E; margin-top:3px;">&#x2713; "nivel": "Junior|Mid|Senior|Lead"  &#x2190; elige uno de estos cuatro exactos</div>
+      </div>
+    </div>
+
+    <div class="step-row" style="padding: 11px 0; border:none;">
+      <div style="width:22px; height:22px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center; font-family:'Montserrat',sans-serif; font-weight:900; font-size:11px; color:#fff; flex-shrink:0;">5</div>
+      <div style="flex:1;">
+        <div style="font-size:12.5px; font-weight:500; margin-bottom:4px;">Pon los l&#xED;mites al final</div>
+        <div style="font-family:'DM Mono',monospace; font-size:10.5px; color:#aaaaaa; line-height:1.6; margin-top:3px;">IMPORTANTE: No inventes datos &#xB7; Si no hay salario, usa null &#xB7; M&#xE1;x 10 palabras</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">11 / 12</div>
+  </div>
+</div>
+
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<!-- PAGE 12 &mdash; EL PROMPT EXPLICADO -->
+<!-- &#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550;&#x2550; -->
+<div class="page" style="padding: 52px 56px 88px;">
+
+  <div class="t-h2" style="color: var(--text-muted); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;">Prompt Engineering</div>
+  <div class="t-display" style="font-size: 30px; color: var(--coral); margin-bottom: 28px;">El prompt del workshop,<br>explicado</div>
+
+  <!-- Annotated prompt -->
+  <div style="background: var(--surface); border-radius: 10px; overflow:hidden; margin-bottom: 26px;">
+    <!-- Row 1 -->
+    <div style="display:flex; border-bottom:1px solid var(--border);">
+      <div style="flex:1; padding:10px 16px; font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5; border-right:1px solid var(--border);">Eres un experto en an&#xE1;lisis del mercado laboral espa&#xF1;ol,<br>especializado en perfiles de datos y tecnolog&#xED;a.</div>
+      <div style="width:190px; flex-shrink:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--coral); letter-spacing:1px;">ROL</div>
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Activa el contexto de mercado laboral espa&#xF1;ol, no gen&#xE9;rico.</div>
+      </div>
+    </div>
+    <!-- Row 2 -->
+    <div style="display:flex; border-bottom:1px solid var(--border);">
+      <div style="flex:1; padding:10px 16px; font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5; border-right:1px solid var(--border);">Tu tarea es analizar un CV y un conjunto de ofertas<br>y devolver un an&#xE1;lisis completo en formato JSON estricto.</div>
+      <div style="width:190px; flex-shrink:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--coral); letter-spacing:1px;">TAREA + FORMAT HINT</div>
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Ya avisa desde el inicio que el output ser&#xE1; JSON.</div>
+      </div>
+    </div>
+    <!-- Row 3 -->
+    <div style="display:flex; border-bottom:1px solid var(--border);">
+      <div style="flex:1; padding:10px 16px; font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5; border-right:1px solid var(--border);">Lee el CV: extrae skills, a&#xF1;os de experiencia,<br>seniority, idiomas, tipo de roles buscados.</div>
+      <div style="width:190px; flex-shrink:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--coral); letter-spacing:1px;">INSTRUCCI&#xD3;N</div>
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Define exactamente qu&#xE9; extraer del CV.</div>
+      </div>
+    </div>
+    <!-- Row 4 -->
+    <div style="display:flex; border-bottom:1px solid var(--border);">
+      <div style="flex:1; padding:10px 16px; font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5; border-right:1px solid var(--border);">Calcula un score (0-100) basado en:<br>&nbsp;&nbsp;- Skills t&#xE9;cnicas (40%)<br>&nbsp;&nbsp;- Experiencia requerida (25%)<br>&nbsp;&nbsp;- Tipo de rol (20%)  &#xB7; Condiciones (15%)</div>
+      <div style="width:190px; flex-shrink:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--coral); letter-spacing:1px;">CRITERIOS</div>
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">Con pesos expl&#xED;citos. Sin esto, el score ser&#xED;a arbitrario.</div>
+      </div>
+    </div>
+    <!-- Row 5 -->
+    <div style="display:flex;">
+      <div style="flex:1; padding:10px 16px; font-family:'DM Mono',monospace; font-size:11px; color:#aaaaaa; line-height:1.5; border-right:1px solid var(--border);">RESPONDE &#xDA;NICAMENTE con este JSON exacto,<br>sin texto adicional, sin markdown.</div>
+      <div style="width:190px; flex-shrink:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; gap:3px;">
+        <div style="font-family:'DM Mono',monospace; font-size:9px; color:var(--coral); letter-spacing:1px;">RESTRICCI&#xD3;N</div>
+        <div style="font-size:11px; color:var(--text-muted); line-height:1.4;">"&#xDA;nicamente" es clave &#x2014; sin ella Claude a&#xF1;ade texto extra.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Experimentation table -->
+  <div class="t-h2" style="font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">&#xBF;Qu&#xE9; pasa si modificas el prompt?</div>
+  <table style="margin-bottom: 24px; font-size:12px;">
+    <thead>
+      <tr>
+        <th>Modificaci&#xF3;n</th>
+        <th>Efecto esperado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-family:'DM Mono',monospace; font-size:11px; color:var(--coral);">skills t&#xE9;cnicas &#x2192; 60%</td>
+        <td style="color:var(--text-muted);">Favorecer&#xE1; m&#xE1;s las coincidencias t&#xE9;cnicas exactas</td>
+      </tr>
+      <tr>
+        <td style="font-family:'DM Mono',monospace; font-size:11px; color:var(--coral);">+ "valora especialmente el salario"</td>
+        <td style="color:var(--text-muted);">Bajar&#xE1; el score de ofertas con salario bajo o sin indicar</td>
+      </tr>
+      <tr>
+        <td style="font-family:'DM Mono',monospace; font-size:11px; color:var(--coral);">+ "responde en ingl&#xE9;s"</td>
+        <td style="color:var(--text-muted);">Todo el output en ingl&#xE9;s</td>
+      </tr>
+      <tr>
+        <td style="font-family:'DM Mono',monospace; font-size:11px; color:var(--coral);">+ criterio "cultura de empresa"</td>
+        <td style="color:var(--text-muted);">Claude intentar&#xE1; inferirlo del texto de la oferta</td>
+      </tr>
+      <tr>
+        <td style="font-family:'DM Mono',monospace; font-size:11px; color:var(--coral);">"10 palabras" &#x2192; "5 palabras"</td>
+        <td style="color:var(--text-muted);">Recomendaciones m&#xE1;s cortas y telegr&#xE1;ficas</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Final quote -->
+  <div style="border-top:1px solid var(--border); padding-top:20px; text-align:center;">
+    <div style="font-family:'DM Sans',sans-serif; font-style:italic; font-size:16px; color:var(--coral); font-weight:300; line-height:1.6;">
+      "El prompt no es la magia.<br>El prompt es la especificaci&#xF3;n."
+    </div>
+  </div>
+
+  <div class="page-footer">
+    <div class="logo">root_</div>
+    <div class="page-num">12 / 12 &nbsp;&#xB7;&nbsp; tryroot.io</div>
+  </div>
+</div>
+
+<!-- Print button -->
+<div class="print-btn-wrap">
+  <button class="print-btn" onclick="window.print()">
+    <span data-emoji="down"></span><span class="print-btn-label"><span class="print-btn-label-full"> Guardar como PDF</span></span>
+  </button>
+</div>
+
+<style>
+  @media print {
+    body { padding: 0; background: #1A1A1A !important; }
+    .page { margin: 0 !important; width: 210mm; min-height: 297mm; }
+    button { display: none !important; }
+    @page { size: A4 portrait; margin: 0; background: #1A1A1A; }
+  }
+</style>
+
+
+
+<script>
+(function() {
+  var EMOJIS = {
+    doc:       '📄',
+    csv:       '📊',
+    robot:     '🤖',
+    clipboard: '📋',
+    memo:      '📝',
+    chart:     '📈',
+    people:    '👥',
+    suit:      '🧑‍💼',
+    beer:      '🎺',
+    key:       '🔑',
+    warning:   '⚠️',
+    bulb:      '💡',
+    lightning: '⚡',
+    down:      '⬇️'
+  };
+  document.querySelectorAll('[data-emoji]').forEach(function(el) {
+    var name = el.getAttribute('data-emoji');
+    if (EMOJIS[name]) el.textContent = EMOJIS[name];
+  });
+})();
+</script>
+</body></html>

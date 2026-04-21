@@ -78,6 +78,25 @@ header {
   gap: 20px;
 }
 
+.header-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface2);
+  transition: all 0.2s ease;
+}
+
+.header-link:hover {
+  color: var(--coral);
+  border-color: var(--coral-mid);
+}
+
 .status-pill {
   display: flex;
   align-items: center;
@@ -549,8 +568,6 @@ textarea::placeholder { color: var(--muted2); }
 /* BAR CHART */
 .bar-list { display: flex; flex-direction: column; gap: 8px; }
 
-.bar-item {}
-
 .bar-meta {
   display: flex;
   justify-content: space-between;
@@ -837,6 +854,12 @@ footer {
 
 .footer-brand span { color: var(--coral); }
 
+.footer-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted2);
+}
+
 /* TOAST */
 .toast {
   position: fixed;
@@ -861,11 +884,236 @@ footer {
 .toast.error { border-color: rgba(255,107,107,0.3); color: var(--coral); }
 
 @media (max-width: 1100px) {
-  main { grid-template-columns: 1fr; }
-  .hero { grid-template-columns: 1fr; }
+  header {
+    padding: 14px 20px;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .header-right {
+    width: 100%;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 34px 20px 26px;
+    gap: 20px;
+  }
   .pipeline-viz { justify-content: flex-start; }
+  main {
+    grid-template-columns: 1fr;
+    padding: 24px 20px;
+    gap: 20px;
+  }
   .metrics-grid { grid-template-columns: repeat(2,1fr); }
   .insights-grid { grid-template-columns: 1fr; }
+  .section-divider { padding: 0 20px 8px; }
+  footer { padding: 16px 20px; }
+}
+
+@media (max-width: 760px) {
+  body {
+    font-size: 13px;
+  }
+
+  .logo {
+    font-size: 11px;
+    gap: 6px;
+  }
+
+  .logo-mark {
+    width: 18px;
+    height: 18px;
+    font-size: 9px;
+  }
+
+  .header-link,
+  .status-pill {
+    font-size: 9px;
+    padding: 5px 9px;
+  }
+
+  .hero h1 {
+    font-size: clamp(30px, 10vw, 42px);
+    margin-bottom: 12px;
+  }
+
+  .hero p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .pipeline-viz {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  .pipe-node {
+    min-width: 0;
+    width: 100%;
+    padding: 12px 12px;
+  }
+
+  .pipe-arrow {
+    display: none;
+  }
+
+  .panel {
+    border-radius: 12px;
+  }
+
+  .panel-header {
+    padding: 14px 14px;
+  }
+
+  .panel-title {
+    font-size: 13px;
+  }
+
+  .panel-body {
+    padding: 14px;
+  }
+
+  .drop-zone {
+    padding: 16px 12px;
+  }
+
+  .drop-text {
+    font-size: 12px;
+  }
+
+  textarea {
+    font-size: 10px;
+    min-height: 110px;
+  }
+
+  #promptEditor {
+    min-height: 210px !important;
+    font-size: 9.5px !important;
+    line-height: 1.65 !important;
+  }
+
+  .tab-btn {
+    padding: 10px 8px;
+    font-size: 11px;
+  }
+
+  /* Primary action always reachable on mobile */
+  #analyzeBtn {
+    position: sticky;
+    bottom: calc(env(safe-area-inset-bottom) + 8px);
+    z-index: 25;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+  }
+
+  .metric-card {
+    padding: 14px 14px;
+  }
+
+  .metric-value {
+    font-size: 26px;
+  }
+
+  .table-header-row {
+    padding: 12px 14px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .export-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  thead th,
+  tbody td {
+    padding: 10px 10px;
+  }
+
+  .flourish-cta {
+    padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .flourish-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .toast {
+    left: 10px;
+    right: 10px;
+    bottom: calc(env(safe-area-inset-bottom) + 10px);
+    padding: 12px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  header {
+    padding: 12px 12px;
+  }
+
+  .header-right {
+    flex-wrap: wrap;
+  }
+
+  .header-link {
+    order: 2;
+  }
+
+  .status-pill {
+    order: 1;
+  }
+
+  .hero {
+    padding: 24px 12px 20px;
+  }
+
+  main {
+    padding: 14px 12px 18px;
+    gap: 14px;
+  }
+
+  .section-divider {
+    padding: 0 12px 8px;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .narrative-box {
+    padding: 16px;
+  }
+
+  footer {
+    padding: 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 20px;
+    border-radius: 12px 12px 0 0;
+    background: var(--surface);
+  }
+
+  .footer-brand {
+    font-size: 10px;
+    line-height: 1.6;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .footer-meta {
+    font-size: 10px;
+    text-align: center;
+    letter-spacing: 0.06em;
+  }
 }
 </style>
 </head>
@@ -888,6 +1136,7 @@ footer {
     Analizador de Empleo IA
   </div>
   <div class="header-right">
+    <a class="header-link" href="Workshop Guide.html">Workshop Guide</a>
     <div class="status-pill">
       <div class="status-dot" id="statusDot"></div>
       <span id="statusText">sin conectar</span>
@@ -928,7 +1177,7 @@ footer {
 <!-- MAIN -->
 <main>
   <!-- LEFT: INPUT PANEL -->
-  <div style="display:flex; flex-direction:column; gap:16px;">
+  <div class="input-column" style="display:flex; flex-direction:column; gap:16px;">
 
     <!-- API KEY -->
     <div class="panel">
@@ -1076,7 +1325,7 @@ Data Analyst | Cabify | Madrid | 35000 | Python, SQL, Tableau | Sí
 
 <footer>
   <div class="footer-brand">workshop · visualización de datos con IA · powered by <span>root_</span></div>
-  <div style="font-family:'DM Mono',monospace; font-size:10px; color:var(--muted2);">claude-haiku-4-5 · 2026</div>
+  <div class="footer-meta">2026</div>
 </footer>
 
 <script>
